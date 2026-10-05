@@ -18,6 +18,9 @@
     .external-dialog button{font-family:inherit;cursor:pointer;border:1px solid var(--ink);background:transparent;color:var(--ink)}
     .external-dialog a:focus-visible,.external-dialog button:focus-visible{outline:3px solid #bc7b35;outline-offset:4px}
     @media(max-width:640px){.external-dialog{padding:22px}.external-dialog-actions>*{width:100%;gap:18px}}
+    #teleguard-copy{font:inherit;cursor:pointer}
+    #teleguard-copy[hidden]{display:none}
+    #teleguard-copy:focus-visible{outline:3px solid #bc7b35;outline-offset:4px}
   </style>
 </head>
 <body class="contact-page">
@@ -37,15 +40,19 @@
     <h1>Kontakt</h1>
     <p class="contact-intro">Sie möchten mit mir über eine Leitungsaufgabe, eine Zusammenarbeit oder ein Aufbauprojekt sprechen? Schreiben Sie mir gerne eine E-Mail.</p>
     <nav class="contact-options" aria-label="Kontaktmöglichkeiten">
-      <a href="#chat"><span>01 / PERSÖNLICH</span><strong>Online mit mir chatten</strong><small>Noch nicht verfügbar</small></a>
+      <a href="#chat"><span>01 / PERSÖNLICH</span><strong>Online mit mir chatten</strong><small>Über TeleGuard</small></a>
       <a href="#termin"><span>02 / KENNENLERNEN</span><strong>Kennenlerntermin anfragen</strong><small>Termin auswählen und anfragen</small></a>
       <a href="#email"><span>03 / DIREKT</span><strong>E-Mail schreiben</strong><small>Jetzt möglich</small></a>
     </nav>
     <section class="contact-section" id="chat" aria-labelledby="chat-title">
       <div><span class="section-kicker">01 / PERSÖNLICHER CHAT</span><h2 id="chat-title">Online mit mir chatten</h2></div>
       <div class="contact-copy">
-        <p>Hier ist ein persönlicher Chat mit mir vorgesehen. Die Chatfunktion ist noch nicht angeschlossen; meine Erreichbarkeit kann hier deshalb derzeit nicht angezeigt werden.</p>
-        <p>Bis dahin erreichen Sie mich per <a href="#email">E-Mail</a>.</p>
+        <p>Sie können mir über TeleGuard schreiben. Eine Telefonnummer ist dafür nicht erforderlich.</p>
+        <p>Meine TeleGuard-ID: <strong id="teleguard-id">ZMANW5FUQ</strong></p>
+        <button class="button button-primary" type="button" id="teleguard-copy" hidden>TeleGuard-ID kopieren</button>
+        <p class="contact-small" id="teleguard-copy-status" role="status" aria-live="polite"></p>
+        <p>Fügen Sie die ID in TeleGuard als neuen Kontakt hinzu. Nach meiner Bestätigung können Sie mir schreiben. TeleGuard muss dafür installiert sein.</p>
+        <p class="contact-small">Dieser Chat findet in TeleGuard statt. Eine Anzeige meiner aktuellen Erreichbarkeit gibt es hier nicht. <a href="./datenschutz.html#teleguard">Datenschutzhinweise</a></p>
       </div>
     </section>
     <section class="contact-section" id="termin" aria-labelledby="termin-title">
@@ -81,6 +88,21 @@
     </div>
   </dialog>
   <script>
+    (() => {
+      const button = document.getElementById('teleguard-copy');
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      button.hidden = false;
+      button.addEventListener('click', async () => {
+        const status = document.getElementById('teleguard-copy-status');
+        try {
+          await navigator.clipboard.writeText(document.getElementById('teleguard-id').textContent);
+          status.textContent = 'TeleGuard-ID kopiert. Sie können sie jetzt in TeleGuard einfügen.';
+        } catch {
+          status.textContent = 'Kopieren war nicht möglich. Bitte markieren und kopieren Sie die ID ZMANW5FUQ manuell.';
+        }
+      });
+    })();
+
     (() => {
       const notice = document.getElementById('cal-notice');
       if (typeof notice.showModal !== 'function') return;
